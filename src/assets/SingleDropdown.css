@@ -28,7 +28,7 @@
   padding: 0.5rem;
   border-radius: 0.4rem;
   max-height: 12rem;
-  overflow-y: scroll;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
@@ -58,7 +58,11 @@
     transform: rotate(360deg);
   }
 }
-.dropdown-list {
+.no-records {
+  text-align: center;
+  font-size: x-small;
+}
+.dropdown-list-item {
   font-size: small;
   cursor: pointer;
 }
