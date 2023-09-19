@@ -1,13 +1,12 @@
 import { useQuery } from 'react-query';
-import '../assets/SingleDropdown.css';
 import { BsChevronDown } from 'react-icons/bs';
 import { RxCross2 } from 'react-icons/rx';
 import { FiLoader } from 'react-icons/fi';
 import { useEffect, useRef, useState } from 'react';
 import useClickOutsideHandler from './useClickOutsideHandler';
+
 const SingleDropdown = ({ queryKey = 'listing', queryFn = null, value = '', onChange = () => {}, placeholder = 'Select option', displayKeyWithLabel = false, isRawData = false, rawData = null }) => {
   const dropdownRef = useRef(null);
-  const [length, setLength] = useState(10);
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState('');
   const [listData, setListData] = useState([]);
@@ -72,27 +71,8 @@ const SingleDropdown = ({ queryKey = 'listing', queryFn = null, value = '', onCh
           {isError && <div className='no-records'>Error while getting list</div>}
           {(isLoading || isFetching) && <FiLoader className='dropdown-loader' />}
           {(!isLoading || !isFetching) && !isError && Array.isArray(listData) && listData.length === 0 && <div className='no-records'>No records</div>}
-          {!search && Array.isArray(listData) && listData.length > 0 && listData.slice(0, length).map(({ value, label }, index, arr) => <DropdownListItem {...{ index, label, value, displayKeyWithLabel, onChange, arr }} key={index} />)}
-          {search &&
-            Array.isArray(listData) &&
-            listData.length > 0 &&
-            listData
-              .filter(({ value, label }) => label.toLowerCase().includes(search.toLowerCase()) || value.includes(search))
-              .map(({ value, label }, index) => {
-                return (
-                  <div
-                    key={index}
-                    className='dropdown-list-item'
-                    onClick={() => {
-                      onChange(value);
-                    }}
-                  >
-                    <p>
-                      {label} {displayKeyWithLabel ? `(${value})` : ''}
-                    </p>
-                  </div>
-                );
-              })}
+          {!search && Array.isArray(listData) && listData.length > 0 && listData.map(({ value, label }, index, arr) => <DropdownListItem {...{ index, label, value, displayKeyWithLabel, onChange, arr }} key={index} />)}
+          {search && Array.isArray(listData) && listData.length > 0 && listData.filter(({ value, label }) => label.toLowerCase().includes(search.toLowerCase()) || value.includes(search)).map(({ value, label }, index) => <DropdownListItem {...{ index, label, value, displayKeyWithLabel, onChange, arr }} key={index} />)}
         </div>
       )}
     </div>
@@ -105,7 +85,7 @@ const DropdownListItem = ({ index, label, arr, value, displayKeyWithLabel, onCha
   return (
     <div
       key={index}
-      className='dropdown-list-item'
+      className='single-dropdown-list-item'
       onClick={() => {
         onChange(value);
       }}

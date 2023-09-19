@@ -1,1 +1,2 @@
-export { default as SingleDropdown } from "./SingleDropdown"
+export { default as MultiDropdown } from './MultiDropdown';
+export { default as SingleDropdown } from './SingleDropdown';
