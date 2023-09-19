@@ -70,7 +70,7 @@ body {
     transform: rotate(360deg);
   }
 }
-.no-records {
+.centered-text {
   text-align: center;
   font-size: x-small;
 }

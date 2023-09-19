@@ -4,11 +4,13 @@ import { FiLoader } from 'react-icons/fi';
 import { RxCross2 } from 'react-icons/rx';
 import { useQuery } from 'react-query';
 import useClickOutsideHandler from './useClickOutsideHandler';
+import { CiMaximize1, CiMinimize1 } from 'react-icons/ci';
 const MultiDropdown = ({ name = '', queryKey = 'listing', queryFn = null, values = [], onChange = () => {}, placeholder = 'Select option', isRawData = false, rawData = null, displayKeyWithLabel = false }) => {
   const dropdownRef = useRef(null);
   const [search, setSearch] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const [listData, setListData] = useState([]);
+  const [isMinimize, setIsMinimize] = useState(false);
   const {
     data: apiData,
     isSuccess,
@@ -67,28 +69,61 @@ const MultiDropdown = ({ name = '', queryKey = 'listing', queryFn = null, values
         <div className='dropdown-panel'>
           <input className='search-bar' type='search' value={search} onChange={(e) => setSearch(e.target.value)} placeholder='search' />
           {(isLoading || isFetching) && <FiLoader className='dropdown-loader' />}
-          {(!isLoading || !isFetching) && !isError && Array.isArray(listData) && listData.length === 0 && <div className='no-records'>No records</div>}
-          {values.length > 0 &&
-            values.map(({ label, value }, index) => (
-              <DropdownListItem
-                key={`${name}_${label}_${value}_${index}`}
-                {...{
-                  name,
-                  label,
-                  value,
-                  index,
-                  displayKeyWithLabel,
-                  values,
-                  checked: true,
-                  onChange: () => {
-                    const newState = [...values];
-                    newState.splice(index, 1);
-                    onChange(newState);
-                  },
+          {(!isLoading || !isFetching) && !isError && Array.isArray(listData) && listData.length === 0 && <div className='centered-text'>No records</div>}
+          {(!isLoading || !isFetching) && !isError && !search && Array.isArray(listData) && (
+            <div className='multi-dropdown-list-item'>
+              <input
+                type='checkbox'
+                id={`select-all`}
+                checked={values.length === listData.length}
+                onChange={(e) => {
+                  if (e.target.checked) onChange(listData);
+                  else onChange([]);
                 }}
               />
-            ))}
-          <hr />
+              <label style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                <span>Select All</span>
+                <span
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsMinimize(!isMinimize);
+                  }}
+                >
+                  {isMinimize ? <CiMaximize1 /> : <CiMinimize1 />}
+                </span>
+              </label>
+            </div>
+          )}
+          {isMinimize && values.length > 0 && (
+            <>
+              <p className='centered-text'>{values.length} selected</p>
+              <hr />
+            </>
+          )}
+          {!isMinimize && values.length > 0 && (
+            <>
+              {values.map(({ label, value }, index) => (
+                <DropdownListItem
+                  key={`${name}_${label}_${value}_${index}`}
+                  {...{
+                    name,
+                    label,
+                    value,
+                    index,
+                    displayKeyWithLabel,
+                    values,
+                    checked: true,
+                    onChange: () => {
+                      const newState = [...values];
+                      newState.splice(index, 1);
+                      onChange(newState);
+                    },
+                  }}
+                />
+              ))}
+              <hr />
+            </>
+          )}
           {!search &&
             Array.isArray(listData) &&
             listData.map(({ value, label }, index) => {

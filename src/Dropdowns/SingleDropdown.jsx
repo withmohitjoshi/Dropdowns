@@ -68,9 +68,9 @@ const SingleDropdown = ({ queryKey = 'listing', queryFn = null, value = '', onCh
       {isOpen && (
         <div className='dropdown-panel'>
           <input className='search-bar' type='search' value={search} onChange={(e) => setSearch(e.target.value)} placeholder='search' />
-          {isError && <div className='no-records'>Error while getting list</div>}
+          {isError && <div className='centered-text'>Error while getting list</div>}
           {(isLoading || isFetching) && <FiLoader className='dropdown-loader' />}
-          {(!isLoading || !isFetching) && !isError && Array.isArray(listData) && listData.length === 0 && <div className='no-records'>No records</div>}
+          {(!isLoading || !isFetching) && !isError && Array.isArray(listData) && listData.length === 0 && <div className='centered-text'>No records</div>}
           {!search && Array.isArray(listData) && listData.length > 0 && listData.map(({ value, label }, index, arr) => <DropdownListItem {...{ index, label, value, displayKeyWithLabel, onChange, arr }} key={index} />)}
           {search && Array.isArray(listData) && listData.length > 0 && listData.filter(({ value, label }) => label.toLowerCase().includes(search.toLowerCase()) || value.includes(search)).map(({ value, label }, index) => <DropdownListItem {...{ index, label, value, displayKeyWithLabel, onChange, arr }} key={index} />)}
         </div>
